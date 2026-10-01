@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="claro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gestor de Funkos</title>
+<script>try{var t=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro');document.documentElement.dataset.tema=t}catch(e){}</script>
+<link rel="stylesheet" href="css/tema.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/formulario.css">
+<link rel="stylesheet" href="css/listado.css">
+<link rel="stylesheet" href="css/vistas.css">
+</head>
+<body>
+<div id="app">
+  <header class="cabecera">
+    <h1>Colección de Funkos</h1>
+    <span class="sync" :class="S.servidor">{{ textoSync }}</span>
+    <button class="btn fantasma" @click="alternarTema" :title="S.tema==='oscuro'?'Cambiar a modo claro':'Cambiar a modo oscuro'">
+      {{ S.tema==='oscuro' ? '☀ Claro' : '☾ Oscuro' }}
+    </button>
+  </header>
+  <main class="wrap">
+    <div class="grid" :class="{plegado: !S.panelAbierto}">
+      <aside v-show="S.panelAbierto" class="lateral">
+        <formulario-funko></formulario-funko>
+        <datos-funko></datos-funko>
+        <catalogos-funko></catalogos-funko>
+      </aside>
+      <div>
+        <nav class="vistas"><button v-for="v in vistas" :key="v.id" :class="{on: S.vista === v.id}" @click="S.vista = v.id">{{ v.t }}</button></nav>
+        <listado-funkos v-show="S.vista !== 'stats'"></listado-funkos>
+        <estadisticas-funkos v-if="S.vista === 'stats'"></estadisticas-funkos>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.min.js"></script>
+<script src="js/store.js"></script>
+<script src="js/componentes/ficha.js"></script>
+<script src="js/componentes/formulario.js"></script>
+<script src="js/componentes/datos.js"></script>
+<script src="js/componentes/catalogos.js"></script>
+<script src="js/componentes/estadisticas.js"></script>
+<script src="js/componentes/listado.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

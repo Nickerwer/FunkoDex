@@ -1,0 +1,31 @@
+.barra{display:flex;flex-wrap:wrap;gap:8px}
+.barra input,.barra select{flex:1 1 180px;width:auto;margin:0}
+.resumen{margin:10px 2px;color:var(--suave);font-size:13px}
+.lista{display:flex;flex-direction:column;gap:8px}
+.ficha{display:flex;gap:14px;padding:12px;border:1px solid var(--borde);border-radius:10px;background:var(--tarjeta)}
+.ficha.activa{border-color:var(--acento);background:color-mix(in srgb,var(--acento) 8%,var(--tarjeta))}
+.num{flex:0 0 70px;align-self:flex-start;text-align:center;padding:6px 4px;border-radius:8px;background:var(--fondo);border:1px solid var(--borde);font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
+.num.vacio{font-size:12px;font-weight:500;color:var(--suave)}
+.cuerpo{flex:1;min-width:0}
+.cuerpo h3{margin:0;font-size:16px}
+.coleccion{color:var(--suave);font-size:13px}
+.pegatinas{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:5px}
+.peg{display:inline-block;padding:2px 9px;border-radius:5px;font-size:12px;font-weight:500;
+  background:hsl(var(--h) var(--chip-s) var(--chip-f));color:hsl(var(--h) 55% var(--chip-t));border:1px solid hsl(var(--h) 40% 55%/.5)}
+.pegatinas .peg::before{content:"✦ ";font-size:10px}
+.compra{margin-top:6px;font-size:13px;color:var(--suave)}
+.nota{font-size:12px;color:var(--suave);font-style:italic}
+.coment{margin:6px 0 0;padding-left:8px;border-left:3px solid var(--borde);font-size:13px;white-space:pre-line}
+.acciones{display:flex;flex-direction:column;gap:6px}
+.vacio-lista{text-align:center;color:var(--suave);padding:24px}
+@media(max-width:520px){.ficha{flex-wrap:wrap}.acciones{flex-direction:row}}
+.foto{flex:0 0 auto;width:64px;height:64px;object-fit:contain;border-radius:8px;background:var(--fondo)}
+.estado{margin-left:8px;padding:1px 8px;border:1px solid var(--borde);border-radius:999px;font-size:11px;font-weight:600;color:var(--suave);vertical-align:middle}
+.e-quiero .estado{border-style:dashed}
+.e-vendido{opacity:.65}
+.rep{display:inline-block;margin-top:6px;padding:1px 8px;border-radius:5px;background:var(--peligro-f);color:var(--peligro);font-size:12px}
+.lista.cuadricula{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.cuadricula .ficha{flex-direction:column}
+.cuadricula .foto{order:-1;width:100%;height:auto;aspect-ratio:1}
+.cuadricula .num{flex:none;width:auto;align-self:flex-start;padding:4px 10px}
+.cuadricula .acciones{flex-direction:row}

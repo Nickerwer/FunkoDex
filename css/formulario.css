@@ -1,0 +1,15 @@
+form label,fieldset legend{display:block;font-size:13px;color:var(--suave);margin-bottom:10px}
+input[type=text],input[type=search],input[type=date],select,textarea{width:100%;margin-top:4px;padding:8px;border-radius:8px;border:1px solid var(--borde);background:var(--fondo);color:var(--texto);font:inherit;font-size:14px}
+textarea{resize:vertical}
+.fila{display:flex;gap:8px;align-items:flex-end}
+.fila>label,.fila>input{flex:1;min-width:0}
+.fila>label.corto{flex:0 0 90px}
+.fila.fin{margin-top:4px}
+fieldset{border:1px solid var(--borde);border-radius:8px;margin:0 0 10px;padding:8px 10px 10px}
+fieldset legend{padding:0 4px;margin:0}
+.opciones{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.opcion{margin:0;cursor:pointer}
+.opcion input{position:absolute;opacity:0}
+.opcion .peg{opacity:.45;cursor:pointer}
+.opcion input:checked+.peg{opacity:1;box-shadow:0 0 0 2px hsl(var(--h) 60% 50%)}
+.opcion input:focus-visible+.peg{outline:2px solid var(--acento)}

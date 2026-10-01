@@ -1,0 +1,11 @@
+/* Variables de color: aquí se define el modo claro y el oscuro */
+:root, [data-tema="claro"] {
+  --fondo:#eef1f6; --tarjeta:#fff; --borde:#dde2ec; --texto:#161b26; --suave:#667085;
+  --acento:#2f5bea; --acento-t:#fff; --peligro:#b42318; --peligro-f:#fde8e6; --sombra:0 4px 14px rgba(20,30,60,.07);
+  --cabecera:#101828; --chip-f:90%; --chip-s:70%; --chip-t:26%;
+}
+[data-tema="oscuro"] {
+  --fondo:#0e1118; --tarjeta:#171b25; --borde:#272d3b; --texto:#e6e9f1; --suave:#98a1b3;
+  --acento:#7b97ff; --acento-t:#0b1020; --peligro:#ff9b8f; --peligro-f:#3a1d1d; --sombra:none;
+  --cabecera:#0a0d13; --chip-f:22%; --chip-s:45%; --chip-t:82%; color-scheme:dark;
+}
