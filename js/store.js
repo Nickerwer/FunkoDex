@@ -34,24 +34,6 @@ window.Funko = {};
     S.pegatinas = [...new Set([...S.pegatinas, ...S.funkos.flatMap(f => f.pegatinas)].filter(Boolean))].sort(orden);
   }
 
-  // --- Servidor PHP (api.php) ---
-  /*
-  let temporizador;
-  function aServidor() {
-    if (S.servidor === 'local') return;
-    S.servidor = 'guardando'; clearTimeout(temporizador);
-    temporizador = setTimeout(async () => {
-      try {
-        for (const [q, v] of [['funkos', S.funkos], ['pegatinas', S.pegatinas]]) {
-          const r = await fetch('api.php?que=' + q, { method: 'POST', body: JSON.stringify(v, null, 2) });
-          if (!r.ok) throw 0;
-        }
-        S.servidor = 'servidor';
-      } catch (e) { S.servidor = 'error'; }
-    }, 700);
-  }
-    */
-
   // --- Copia local diaria (se conservan 7) ---
   function copiaDiaria() {
     const k = 'backup_' + new Date().toISOString().slice(0, 10);
@@ -70,38 +52,39 @@ window.Funko = {};
     if (!f) { const viejo = leer('funkos', null); if (viejo) f = viejo.map(F.normalizar); }
     S.pegatinas = leer('pegatinas_v2', []);
     S.colecciones = leer('colecciones_v2', leer('colecciones', []));
-    /*
-    let subir = false;
-    try { // ¿hay servidor PHP? Si responde, manda el servidor
-      const [a, b] = await Promise.all([fetch('api.php?que=funkos'), fetch('api.php?que=pegatinas')]);
-      if (!a.ok || !b.ok) throw 0;
-      const sf = await a.json(), sp = await b.json();
-      if (!Array.isArray(sf) || !Array.isArray(sp)) throw 0;
-      S.servidor = 'servidor';
-      if (sf.length) {
-        if (f && f.length) L.setItem('funkos_v2_antes_servidor', JSON.stringify(f));
-        f = sf.map(F.normalizar); S.pegatinas = sp; S.colecciones = [];
-      } else subir = !!(f && f.length); // servidor vacío: sube lo local
-    } catch (e) {
-      if (!f) { // primera vez sin servidor: datos de ejemplo (solo con http)
+
+    // Si no hay funkos guardados en localStorage, intenta cargar data/funkos.json
+    if (!f || !f.length) {
+      try {
+        const res = await fetch('data/funkos.json');
+        if (res.ok) {
+          const datos = await res.json();
+          f = datos.map(F.normalizar);
+        }
+      } catch (e) {
+        console.warn('No se pudo cargar data/funkos.json', e);
+      }
+
+      // Opcionalmente carga las pegatinas si no había ninguna guardada
+      if (!S.pegatinas.length) {
         try {
-          f = (await (await fetch('data/funkos.json')).json()).map(F.normalizar);
-          S.pegatinas = await (await fetch('data/pegatinas.json')).json();
-        } catch (e2) { f = []; }
+          const resP = await fetch('data/pegatinas.json');
+          if (resP.ok) {
+            S.pegatinas = await resP.json();
+          }
+        } catch (e) {}
       }
     }
-    */
+
     S.funkos = f || []; sync(); copiaDiaria();
     watch(() => [S.funkos, S.pegatinas, S.colecciones], () => {
       L.setItem('funkos_v2', JSON.stringify(S.funkos));
       L.setItem('pegatinas_v2', JSON.stringify(S.pegatinas));
       L.setItem('colecciones_v2', JSON.stringify(S.colecciones));
-      //aServidor();
     }, { deep: true });
     watch(() => S.tema, t => { document.documentElement.dataset.tema = t; L.setItem('tema', t); }, { immediate: true });
     watch(() => S.panelAbierto, v => L.setItem('panel_abierto', JSON.stringify(v)));
     watch(() => S.vista, v => L.setItem('vista', JSON.stringify(v)));
-    //if (subir) aServidor();
   };
 
   F.alternarPanel = () => { S.panelAbierto = !S.panelAbierto; if (!S.panelAbierto) S.editandoId = null; };
