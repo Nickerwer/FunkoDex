@@ -23,7 +23,7 @@ window.Funko = {};
   const S = F.store = reactive({
     funkos: [], pegatinas: [], colecciones: [],
     tema: L.getItem('tema') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro'),
-    panelAbierto: leer('panel_abierto', true), editandoId: null,
+    panelAbierto: false, editandoId: null,
     vista: leer('vista', 'lista'), servidor: 'local' // local | servidor | guardando | error
   });
 
@@ -83,7 +83,6 @@ window.Funko = {};
       L.setItem('colecciones_v2', JSON.stringify(S.colecciones));
     }, { deep: true });
     watch(() => S.tema, t => { document.documentElement.dataset.tema = t; L.setItem('tema', t); }, { immediate: true });
-    watch(() => S.panelAbierto, v => L.setItem('panel_abierto', JSON.stringify(v)));
     watch(() => S.vista, v => L.setItem('vista', JSON.stringify(v)));
   };
 

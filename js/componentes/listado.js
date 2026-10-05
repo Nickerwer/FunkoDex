@@ -1,7 +1,7 @@
 // Listado con búsqueda, filtros, orden y resumen. Los botones de edición solo salen con el panel abierto.
 Funko.Listado = {
   components: { Ficha: Funko.Ficha },
-  data: () => ({ S: Funko.store, texto: '', coleccion: '', pegatina: '', orden: 'nombre', estado: '', estados: Funko.estados }),
+  data: () => ({ S: Funko.store, texto: '', coleccion: '', pegatina: '', orden: 'nombre', estado: 'tengo', estados: Funko.estados }),
   template: `
   <section class="panel">
     <div class="barra">
@@ -42,7 +42,7 @@ Funko.Listado = {
     gastado() { return this.lista.filter(f => f.estado !== 'quiero').reduce((s, f) => s + Funko.precioNum(f.precio), 0).toFixed(2); }
   },
   methods: {
-    limpiar() { this.texto = ''; this.coleccion = ''; this.pegatina = ''; this.estado = ''; },
+    limpiar() { this.texto = ''; this.coleccion = ''; this.pegatina = ''; this.estado = 'tengo'; },
     alternar() { Funko.alternarPanel(); },
     editar(id) { this.S.editandoId = id; window.scrollTo({ top: 0, behavior: 'smooth' }); },
     borrar(f) { if (confirm('¿Borrar "' + f.nombre + '"?')) Funko.borrar(f.id); }

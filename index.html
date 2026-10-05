@@ -15,7 +15,6 @@
 <div id="app">
   <header class="cabecera">
     <h1>Colección de Funkos</h1>
-    <span class="sync" :class="S.servidor">{{ textoSync }}</span>
     <button class="btn fantasma" @click="alternarTema" :title="S.tema==='oscuro'?'Cambiar a modo claro':'Cambiar a modo oscuro'">
       {{ S.tema==='oscuro' ? '☀ Claro' : '☾ Oscuro' }}
     </button>
