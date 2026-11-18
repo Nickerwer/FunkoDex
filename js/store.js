@@ -47,54 +47,14 @@ window.Funko = {};
     const c = leer(k, null); if (!c) return;
     S.funkos = c.funkos.map(F.normalizar); S.pegatinas = c.pegatinas; S.colecciones = []; sync();
   };
-
-  /*
-  F.init = async function () {
-    let f = leer('funkos_v2', null);
-    if (!f) { const viejo = leer('funkos', null); if (viejo) f = viejo.map(F.normalizar); }
-    S.pegatinas = leer('pegatinas_v2', []);
-    S.colecciones = leer('colecciones_v2', leer('colecciones', []));
-
-    // Si no hay funkos guardados en localStorage, intenta cargar data/funkos.json
-    if (!f || !f.length) {
-      try {
-        const res = await fetch('data/funkos.json');
-        if (res.ok) {
-          const datos = await res.json();
-          f = datos.map(F.normalizar);
-        }
-      } catch (e) {
-        console.warn('No se pudo cargar data/funkos.json', e);
-      }
-
-      // Opcionalmente carga las pegatinas si no había ninguna guardada
-      if (!S.pegatinas.length) {
-        try {
-          const resP = await fetch('data/pegatinas.json');
-          if (resP.ok) {
-            S.pegatinas = await resP.json();
-          }
-        } catch (e) {}
-      }
-    }
-
-    S.funkos = f || []; sync(); copiaDiaria();
-    watch(() => [S.funkos, S.pegatinas, S.colecciones], () => {
-      L.setItem('funkos_v2', JSON.stringify(S.funkos));
-      L.setItem('pegatinas_v2', JSON.stringify(S.pegatinas));
-      L.setItem('colecciones_v2', JSON.stringify(S.colecciones));
-    }, { deep: true });
-    watch(() => S.tema, t => { document.documentElement.dataset.tema = t; L.setItem('tema', t); }, { immediate: true });
-    watch(() => S.vista, v => L.setItem('vista', JSON.stringify(v)));
-  };
-  */
+  
   F.init = async function () {
     const B = F.Backend;
     try {
       const d = await B.cargar();
       S.funkos = d.funkos.map(F.normalizar); S.pegatinas = d.pegatinas; S.colecciones = d.colecciones;
     } catch (e) { S.servidor = 'error'; console.warn('No se pudo cargar del servidor', e); }
-    sync(); copiaDiaria();
+    sync(); if (S.admin) copiaDiaria(); 
 
     // Foto del último estado guardado, para saber qué ha cambiado
     let previo = new Map(), ajPrevio = '', cola = Promise.resolve(), t;

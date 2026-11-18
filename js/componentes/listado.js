@@ -14,7 +14,6 @@ Funko.Listado = {
         <option value="coleccion">Ordenar: colección</option><option value="reciente">Ordenar: añadidos último</option>
       </select>
       <button class="btn fantasma" @click="limpiar">Limpiar</button>
-      <button v-if="S.admin && !S.panelAbierto" class="btn" @click="alternar">＋ Añadir / editar</button>
     </div>
     <p class="resumen">{{ lista.length }} de {{ S.funkos.length }} funkos · {{ gastado }} € en lo mostrado (sin contar la lista de deseos)</p>
     <div class="lista" :class="{cuadricula: S.vista === 'cuadricula'}">
