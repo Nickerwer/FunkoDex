@@ -9,14 +9,19 @@ Funko.Backend = (function () {
       const aj = {}; (a.data || []).forEach(r => aj[r.clave] = r.valor);
       return { funkos: f.data.map(r => ({ ...r.datos, id: r.id })), pegatinas: aj.pegatinas || [], colecciones: aj.colecciones || [] };
     },
-    async guardar(d) {
-      if (!d.funkos.length) return; // protección: nunca vaciar la tabla por accidente
-      let r = await db.from('funkos').upsert(d.funkos.map(f => ({ id: f.id, datos: f })));
-      if (r.error) throw r.error;
-      r = await db.from('funkos').delete().not('id', 'in', '(' + d.funkos.map(f => f.id).join(',') + ')');
-      if (r.error) throw r.error;
-      r = await db.from('ajustes').upsert([{ clave: 'pegatinas', valor: d.pegatinas }, { clave: 'colecciones', valor: d.colecciones }]);
-      if (r.error) throw r.error;
+    async guardarFunkos(lista) {            // solo los nuevos o modificados
+        if (!lista.length) return;
+        const r = await db.from('funkos').upsert(lista.map(f => ({ id: f.id, datos: f })));
+        if (r.error) throw r.error;
+    },
+    async borrarFunkos(ids) {               // solo los eliminados
+        if (!ids.length) return;
+        const r = await db.from('funkos').delete().in('id', ids);
+        if (r.error) throw r.error;
+    },
+    async guardarAjustes(a) {               // catálogos (pesan muy poco)
+        const r = await db.from('ajustes').upsert([{ clave: 'pegatinas', valor: a.pegatinas }, { clave: 'colecciones', valor: a.colecciones }]);
+        if (r.error) throw r.error;
     },
     async sesion() { return usuario((await db.auth.getSession()).data.session); },
     async login(email, pass) { const r = await db.auth.signInWithPassword({ email, password: pass }); if (r.error) throw r.error; },

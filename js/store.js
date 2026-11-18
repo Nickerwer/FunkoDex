@@ -89,27 +89,46 @@ window.Funko = {};
   };
   */
   F.init = async function () {
-    const B = F.Backend; let listo = false;
+    const B = F.Backend;
     try {
       const d = await B.cargar();
       S.funkos = d.funkos.map(F.normalizar); S.pegatinas = d.pegatinas; S.colecciones = d.colecciones;
     } catch (e) { S.servidor = 'error'; console.warn('No se pudo cargar del servidor', e); }
-    sync(); copiaDiaria(); listo = true;
+    sync(); copiaDiaria();
+
+    // Foto del último estado guardado, para saber qué ha cambiado
+    let previo = new Map(), ajPrevio = '', cola = Promise.resolve(), t;
+    const foto = () => {
+      previo = new Map(S.funkos.map(f => [f.id, JSON.stringify(f)]));
+      ajPrevio = JSON.stringify([S.pegatinas, S.colecciones]);
+    };
+    foto();
+
+    async function guardarCambios() {
+      const actual = new Map(S.funkos.map(f => [f.id, JSON.stringify(f)]));
+      const cambiados = S.funkos.filter(f => previo.get(f.id) !== actual.get(f.id));
+      const borrados = [...previo.keys()].filter(id => !actual.has(id));
+      const aj = JSON.stringify([S.pegatinas, S.colecciones]);
+      if (!cambiados.length && !borrados.length && aj === ajPrevio) return;
+      S.servidor = 'guardando';
+      try {
+        await B.guardarFunkos(cambiados);
+        await B.borrarFunkos(borrados);
+        if (aj !== ajPrevio) await B.guardarAjustes({ pegatinas: S.pegatinas, colecciones: S.colecciones });
+        previo = actual; ajPrevio = aj;     // solo se da por guardado si todo fue bien
+        S.servidor = 'servidor';
+      } catch (e) { S.servidor = 'error'; console.warn(e); }
+    }
+
+    watch(() => [S.funkos, S.pegatinas, S.colecciones], () => {
+      if (!S.admin) return;
+      clearTimeout(t);
+      t = setTimeout(() => { cola = cola.then(guardarCambios); }, 600);
+    }, { deep: true });
 
     const poner = s => { S.admin = !!s; S.usuario = s ? s.email : ''; if (!s) { S.panelAbierto = false; S.editandoId = null; } };
     poner(await B.sesion()); B.onSesion(poner);
     S.servidor = S.servidor === 'error' ? 'error' : 'servidor';
-
-    let t;
-    watch(() => [S.funkos, S.pegatinas, S.colecciones], () => {
-      if (!listo || !S.admin) return;
-      clearTimeout(t);
-      t = setTimeout(async () => {
-        S.servidor = 'guardando';
-        try { await B.guardar({ funkos: S.funkos, pegatinas: S.pegatinas, colecciones: S.colecciones }); S.servidor = 'servidor'; }
-        catch (e) { S.servidor = 'error'; }
-      }, 800);
-    }, { deep: true });
 
     watch(() => S.tema, t => { document.documentElement.dataset.tema = t; localStorage.setItem('tema', t); }, { immediate: true });
     watch(() => S.vista, v => L.setItem('vista', JSON.stringify(v)));
