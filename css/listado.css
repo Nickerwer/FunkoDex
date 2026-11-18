@@ -14,8 +14,8 @@
 .segmentos button.on{background:color-mix(in srgb,var(--c) 22%,var(--tarjeta));box-shadow:inset 0 -3px 0 var(--c);font-weight:600}@media(max-width:520px){.filtros select{flex:1 1 140px;max-width:none}.filtros .orden{margin-left:0}}
 .resumen{margin:10px 2px;color:var(--suave);font-size:13px}
 .lista{display:flex;flex-direction:column;gap:8px}
-.ficha{display:flex;gap:14px;padding:12px;border:1px solid var(--borde);border-left:4px solid var(--c,var(--borde));border-radius:10px;
-  background:color-mix(in srgb,var(--c,var(--tarjeta)) 7%,var(--tarjeta))}
+.ficha{display:flex;gap:14px;padding:12px;border:1px solid var(--borde);border-left:3px solid var(--c,var(--borde));border-radius:10px;
+  background:color-mix(in srgb,var(--c,var(--tarjeta)) 3%,var(--tarjeta))}
 .ficha.activa{border-color:var(--acento);border-left-color:var(--c,var(--acento));background:color-mix(in srgb,var(--acento) 8%,var(--tarjeta))}
 .e-tengo{--c:var(--c-tengo)}
 .e-quiero{--c:var(--c-quiero)}
