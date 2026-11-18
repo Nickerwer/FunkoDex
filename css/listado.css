@@ -6,12 +6,20 @@
 .segmentos{display:inline-flex;border:1px solid var(--borde);border-radius:8px;overflow:hidden}
 .segmentos button{padding:7px 12px;border:0;border-right:1px solid var(--borde);background:var(--tarjeta);color:var(--texto);font:inherit;font-size:14px;cursor:pointer}
 .segmentos button:last-child{border-right:0}
-.segmentos button.on{background:var(--acento);color:var(--acento-t)}
-@media(max-width:520px){.filtros select{flex:1 1 140px;max-width:none}.filtros .orden{margin-left:0}}
+.s-todos{--c:var(--acento)}
+.s-tengo{--c:var(--c-tengo)}
+.s-quiero{--c:var(--c-quiero)}
+.s-vendido{--c:var(--c-vendido)}
+.segmentos button::before{content:"";display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%;background:var(--c)}
+.segmentos button.on{background:color-mix(in srgb,var(--c) 22%,var(--tarjeta));box-shadow:inset 0 -3px 0 var(--c);font-weight:600}@media(max-width:520px){.filtros select{flex:1 1 140px;max-width:none}.filtros .orden{margin-left:0}}
 .resumen{margin:10px 2px;color:var(--suave);font-size:13px}
 .lista{display:flex;flex-direction:column;gap:8px}
-.ficha{display:flex;gap:14px;padding:12px;border:1px solid var(--borde);border-radius:10px;background:var(--tarjeta)}
-.ficha.activa{border-color:var(--acento);background:color-mix(in srgb,var(--acento) 8%,var(--tarjeta))}
+.ficha{display:flex;gap:14px;padding:12px;border:1px solid var(--borde);border-left:4px solid var(--c,var(--borde));border-radius:10px;
+  background:color-mix(in srgb,var(--c,var(--tarjeta)) 7%,var(--tarjeta))}
+.ficha.activa{border-color:var(--acento);border-left-color:var(--c,var(--acento));background:color-mix(in srgb,var(--acento) 8%,var(--tarjeta))}
+.e-tengo{--c:var(--c-tengo)}
+.e-quiero{--c:var(--c-quiero)}
+.e-vendido{--c:var(--c-vendido)}
 .num{flex:0 0 70px;align-self:flex-start;text-align:center;padding:6px 4px;border-radius:8px;background:var(--fondo);border:1px solid var(--borde);font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
 .num.vacio{font-size:12px;font-weight:500;color:var(--suave)}
 .cuerpo{flex:1;min-width:0}
@@ -28,7 +36,8 @@
 .vacio-lista{text-align:center;color:var(--suave);padding:24px}
 @media(max-width:520px){.ficha{flex-wrap:wrap}.acciones{flex-direction:row}}
 .foto{flex:0 0 auto;width:64px;height:64px;object-fit:contain;border-radius:8px;background:var(--fondo)}
-.estado{margin-left:8px;padding:1px 8px;border:1px solid var(--borde);border-radius:999px;font-size:11px;font-weight:600;color:var(--suave);vertical-align:middle}
+.estado{margin-left:8px;padding:1px 8px;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);border-radius:999px;font-size:11px;font-weight:600;
+  color:color-mix(in srgb,var(--c) 70%,var(--texto));vertical-align:middle}
 .e-quiero .estado{border-style:dashed}
 .e-vendido{opacity:.65}
 .rep{display:inline-block;margin-top:6px;padding:1px 8px;border-radius:5px;background:var(--peligro-f);color:var(--peligro);font-size:12px}

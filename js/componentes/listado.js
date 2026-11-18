@@ -8,8 +8,8 @@ Funko.Listado = {
       <input class="buscar" v-model="texto" type="search" placeholder="Buscar por nombre, número, colección, tienda…">
       <div class="filtros">
         <div class="segmentos" role="group" aria-label="Estado">
-          <button type="button" :class="{on: estado === ''}" @click="estado = ''">Todos</button>
-          <button type="button" v-for="(t, k) in estados" :key="k" :class="{on: estado === k}" @click="estado = k">{{ t }}</button>
+          <button type="button" class="s-todos" :class="{on: estado === ''}" @click="estado = ''">Todos</button>
+          <button type="button" v-for="(t, k) in estados" :key="k" :class="['s-' + k, {on: estado === k}]" @click="estado = k">{{ t }}</button>
         </div>
         <select v-model="coleccion" aria-label="Colección"><option value="">Todas las colecciones</option><option v-for="c in S.colecciones" :key="c">{{ c }}</option></select>
         <select v-model="pegatina" aria-label="Pegatina"><option value="">Todas las pegatinas</option><option v-for="p in S.pegatinas" :key="p">{{ p }}</option></select>
@@ -46,7 +46,12 @@ Funko.Listado = {
     resumen() {
       const n = this.lista.length;
       const suma = l => l.reduce((s, f) => s + Funko.precioNum(f.precio), 0).toFixed(2);
-      if (this.estado) return n + (n === 1 ? ' funko' : ' funkos') + ' · ' + suma(this.lista) + ' €';
+      if (this.estado) {
+        const total = this.S.funkos.filter(f => f.estado === this.estado).length;
+        const filtrando = this.coleccion || this.pegatina || this.texto.trim();
+        const cuenta = filtrando ? n + ' de ' + total : String(n);
+        return cuenta + ((filtrando ? total : n) === 1 ? ' funko' : ' funkos') + ' · ' + suma(this.lista) + ' €';
+      }
       const sinDeseos = this.lista.filter(f => f.estado !== 'quiero');
       return n + ' de ' + this.S.funkos.length + ' funkos · ' + suma(sinDeseos) + ' € (sin contar la lista de deseos)';
     }
