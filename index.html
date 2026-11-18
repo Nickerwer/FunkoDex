@@ -15,6 +15,8 @@
 <div id="app">
   <header class="cabecera">
     <h1>Colección de Funkos</h1>
+    <span class="sync" :class="S.servidor">{{ textoSync }}</span>
+    <login-funko></login-funko>
     <button class="btn fantasma" @click="alternarTema" :title="S.tema==='oscuro'?'Cambiar a modo claro':'Cambiar a modo oscuro'">
       {{ S.tema==='oscuro' ? '☀ Claro' : '☾ Oscuro' }}
     </button>
@@ -35,7 +37,9 @@
   </main>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/store.js"></script>
+<script src="js/backend-supabase.js"></script>   <!-- ← único archivo a cambiar para otro servidor -->
 <script src="js/componentes/ficha.js"></script>
 <script src="js/componentes/formulario.js"></script>
 <script src="js/componentes/datos.js"></script>

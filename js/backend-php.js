@@ -1,0 +1,1 @@
+// Para otro servidor (por ejemplo tu api.php) escribes backend-php.js con esos mismos 6 métodos y cambias el <script>. El login con PHP sería con sesiones, y el resto de la app no se toca.

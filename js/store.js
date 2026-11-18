@@ -17,10 +17,11 @@ window.Funko = {};
     precio: txt(d.precio ?? d.Precio), tienda: txt(d.tienda ?? d.Tienda),
     fecha: txt(d.fecha ?? d.Fecha), desc: txt(d.desc ?? d.Desc),
     comentarios: txt(d.comentarios ?? d.Comentarios),
-    estado: F.estados[txt(d.estado)] ? txt(d.estado) : 'tengo', foto: txt(d.foto ?? d.Foto)
+    estado: F.estados[txt(d.estado)] ? txt(d.estado) : 'tengo', foto: txt(d.foto ?? d.Foto),
   });
 
   const S = F.store = reactive({
+    admin: false, usuario: '',
     funkos: [], pegatinas: [], colecciones: [],
     tema: L.getItem('tema') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro'),
     panelAbierto: false, editandoId: null,
@@ -47,6 +48,7 @@ window.Funko = {};
     S.funkos = c.funkos.map(F.normalizar); S.pegatinas = c.pegatinas; S.colecciones = []; sync();
   };
 
+  /*
   F.init = async function () {
     let f = leer('funkos_v2', null);
     if (!f) { const viejo = leer('funkos', null); if (viejo) f = viejo.map(F.normalizar); }
@@ -85,8 +87,35 @@ window.Funko = {};
     watch(() => S.tema, t => { document.documentElement.dataset.tema = t; L.setItem('tema', t); }, { immediate: true });
     watch(() => S.vista, v => L.setItem('vista', JSON.stringify(v)));
   };
+  */
+  F.init = async function () {
+    const B = F.Backend; let listo = false;
+    try {
+      const d = await B.cargar();
+      S.funkos = d.funkos.map(F.normalizar); S.pegatinas = d.pegatinas; S.colecciones = d.colecciones;
+    } catch (e) { S.servidor = 'error'; console.warn('No se pudo cargar del servidor', e); }
+    sync(); copiaDiaria(); listo = true;
 
-  F.alternarPanel = () => { S.panelAbierto = !S.panelAbierto; if (!S.panelAbierto) S.editandoId = null; };
+    const poner = s => { S.admin = !!s; S.usuario = s ? s.email : ''; if (!s) { S.panelAbierto = false; S.editandoId = null; } };
+    poner(await B.sesion()); B.onSesion(poner);
+    S.servidor = S.servidor === 'error' ? 'error' : 'servidor';
+
+    let t;
+    watch(() => [S.funkos, S.pegatinas, S.colecciones], () => {
+      if (!listo || !S.admin) return;
+      clearTimeout(t);
+      t = setTimeout(async () => {
+        S.servidor = 'guardando';
+        try { await B.guardar({ funkos: S.funkos, pegatinas: S.pegatinas, colecciones: S.colecciones }); S.servidor = 'servidor'; }
+        catch (e) { S.servidor = 'error'; }
+      }, 800);
+    }, { deep: true });
+
+    watch(() => S.tema, t => { document.documentElement.dataset.tema = t; localStorage.setItem('tema', t); }, { immediate: true });
+    watch(() => S.vista, v => L.setItem('vista', JSON.stringify(v)));
+  };
+
+  F.alternarPanel = () => { if (!S.admin) return; S.panelAbierto = !S.panelAbierto; if (!S.panelAbierto) S.editandoId = null; };
   F.guardarFunko = d => {
     const n = F.normalizar(d), i = S.funkos.findIndex(f => f.id === n.id);
     if (i >= 0) S.funkos[i] = n; else { n.id = nuevoId(); S.funkos.push(n); }
