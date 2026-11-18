@@ -27,7 +27,9 @@ Funko.Ficha = {
   computed: {
     repetido() { return Funko.esRepetido(this.f); },
     compra() {
-      const f = this.f, fecha = f.fecha ? new Date(f.fecha + 'T00:00').toLocaleDateString('es-ES') : '';
+      const f = this.f, fecha = f.fecha
+        ? new Date(f.fecha + 'T00:00').toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
+        : '';
       return [f.tienda, f.precio ? f.precio + ' €' : '', fecha].filter(Boolean).join(' · ');
     }
   },

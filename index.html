@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="es" data-tema="claro">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gestor de Funkos</title>
-<script>try{var t=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro');document.documentElement.dataset.tema=t}catch(e){}</script>
-<link rel="stylesheet" href="css/tema.css">
-<link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/formulario.css">
-<link rel="stylesheet" href="css/listado.css">
-<link rel="stylesheet" href="css/vistas.css">
-<link rel="stylesheet" href="css/menu.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gestor de Funkos</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script>try{var t=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro');document.documentElement.dataset.tema=t}catch(e){}</script>
+  <link rel="stylesheet" href="css/tema.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/formulario.css">
+  <link rel="stylesheet" href="css/listado.css">
+  <link rel="stylesheet" href="css/vistas.css">
+  <link rel="stylesheet" href="css/menu.css">
 </head>
 <body>
-<div id="app">
+<p id="cargando" class="suave" style="text-align:center;padding:40px">Cargando…</p>
+<div id="app" v-cloak>
   <header class="cabecera">
     <h1>Colección de Funkos</h1>
     <div class="cab-der">

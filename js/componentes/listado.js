@@ -5,15 +5,20 @@ Funko.Listado = {
   template: `
   <section class="panel">
     <div class="barra">
-      <input v-model="texto" type="search" placeholder="Buscar por nombre, número, colección, tienda…">
-      <select v-model="coleccion"><option value="">Todas las colecciones</option><option v-for="c in S.colecciones" :key="c">{{ c }}</option></select>
-      <select v-model="pegatina"><option value="">Todas las pegatinas</option><option v-for="p in S.pegatinas" :key="p">{{ p }}</option></select>
-      <select v-model="estado"><option value="">Todos los estados</option><option v-for="(t, k) in estados" :key="k" :value="k">{{ t }}</option></select>
-      <select v-model="orden" aria-label="Ordenar">
-        <option value="nombre">Ordenar: nombre</option><option value="numero">Ordenar: número</option>
-        <option value="coleccion">Ordenar: colección</option><option value="reciente">Ordenar: añadidos último</option>
-      </select>
-      <button class="btn fantasma" @click="limpiar">Limpiar</button>
+      <input class="buscar" v-model="texto" type="search" placeholder="Buscar por nombre, número, colección, tienda…">
+      <div class="filtros">
+        <div class="segmentos" role="group" aria-label="Estado">
+          <button type="button" :class="{on: estado === ''}" @click="estado = ''">Todos</button>
+          <button type="button" v-for="(t, k) in estados" :key="k" :class="{on: estado === k}" @click="estado = k">{{ t }}</button>
+        </div>
+        <select v-model="coleccion" aria-label="Colección"><option value="">Todas las colecciones</option><option v-for="c in S.colecciones" :key="c">{{ c }}</option></select>
+        <select v-model="pegatina" aria-label="Pegatina"><option value="">Todas las pegatinas</option><option v-for="p in S.pegatinas" :key="p">{{ p }}</option></select>
+        <select class="orden" v-model="orden" aria-label="Ordenar">
+          <option value="nombre">Orden: nombre</option><option value="numero">Orden: número</option>
+          <option value="coleccion">Orden: colección</option><option value="reciente">Orden: últimos añadidos</option>
+        </select>
+        <button class="btn fantasma" @click="limpiar">Limpiar</button>
+      </div>
     </div>
     <p class="resumen">{{ lista.length }} de {{ S.funkos.length }} funkos · {{ gastado }} € en lo mostrado (sin contar la lista de deseos)</p>
     <div class="lista" :class="{cuadricula: S.vista === 'cuadricula'}">

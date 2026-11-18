@@ -1,5 +1,13 @@
-.barra{display:flex;flex-wrap:wrap;gap:8px}
-.barra input,.barra select{flex:1 1 180px;width:auto;margin:0}
+.barra{display:flex;flex-direction:column;gap:10px}
+.barra .buscar{width:100%;margin:0;padding:10px 12px;font-size:15px}
+.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filtros select{width:auto;max-width:200px;margin:0}
+.filtros .orden{margin-left:auto}
+.segmentos{display:inline-flex;border:1px solid var(--borde);border-radius:8px;overflow:hidden}
+.segmentos button{padding:7px 12px;border:0;border-right:1px solid var(--borde);background:var(--tarjeta);color:var(--texto);font:inherit;font-size:14px;cursor:pointer}
+.segmentos button:last-child{border-right:0}
+.segmentos button.on{background:var(--acento);color:var(--acento-t)}
+@media(max-width:520px){.filtros select{flex:1 1 140px;max-width:none}.filtros .orden{margin-left:0}}
 .resumen{margin:10px 2px;color:var(--suave);font-size:13px}
 .lista{display:flex;flex-direction:column;gap:8px}
 .ficha{display:flex;gap:14px;padding:12px;border:1px solid var(--borde);border-radius:10px;background:var(--tarjeta)}

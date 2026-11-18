@@ -19,3 +19,4 @@ body{margin:0;background:var(--fondo);color:var(--texto);font:15px/1.45 system-u
 .btn.peligro{background:var(--peligro-f);color:var(--peligro)}
 .btn.pequeno{padding:5px 9px;font-size:13px}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
+[v-cloak]{display:none}

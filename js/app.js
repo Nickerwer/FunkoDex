@@ -11,4 +11,5 @@
     },
     methods: {}
   }).mount('#app');
+  document.getElementById('cargando').remove();
 })();
