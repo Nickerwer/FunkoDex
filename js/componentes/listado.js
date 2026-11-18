@@ -20,7 +20,7 @@ Funko.Listado = {
         <button class="btn fantasma" @click="limpiar">Limpiar</button>
       </div>
     </div>
-    <p class="resumen">{{ lista.length }} de {{ S.funkos.length }} funkos · {{ gastado }} € en lo mostrado (sin contar la lista de deseos)</p>
+    <p class="resumen">{{ resumen }}</p>
     <div class="lista" :class="{cuadricula: S.vista === 'cuadricula'}">
       <ficha v-for="f in lista" :key="f.id" :f="f" :editable="S.panelAbierto" :activa="S.editandoId === f.id"
         @editar="editar(f.id)" @borrar="borrar(f)"></ficha>
@@ -43,7 +43,13 @@ Funko.Listado = {
         ? (parseInt(a.numero) || 1e9) - (parseInt(b.numero) || 1e9)
         : String(a[o]).localeCompare(b[o], 'es', { sensitivity: 'base' }));
     },
-    gastado() { return this.lista.filter(f => f.estado !== 'quiero').reduce((s, f) => s + Funko.precioNum(f.precio), 0).toFixed(2); }
+    resumen() {
+      const n = this.lista.length;
+      const suma = l => l.reduce((s, f) => s + Funko.precioNum(f.precio), 0).toFixed(2);
+      if (this.estado) return n + (n === 1 ? ' funko' : ' funkos') + ' · ' + suma(this.lista) + ' €';
+      const sinDeseos = this.lista.filter(f => f.estado !== 'quiero');
+      return n + ' de ' + this.S.funkos.length + ' funkos · ' + suma(sinDeseos) + ' € (sin contar la lista de deseos)';
+    }
   },
   methods: {
     limpiar() { this.texto = ''; this.coleccion = ''; this.pegatina = ''; this.estado = 'tengo'; },
